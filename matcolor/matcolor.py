@@ -7,7 +7,6 @@ import matplotlib.colors as mcolors
 import numpy as np
 from PIL import Image
 
-
 class extract_feature_colors:
     """
     提取图片的特征颜色，包括构建颜色映射和绘制颜色映射。
@@ -96,7 +95,7 @@ class extract_feature_colors:
 class matcolor:
     
     def __init__(self):
-        self.register_schemes(yamlpath='./colorschemes/dcolor.yaml')
+        self.register_schemes(yamlpath='../colorschemes/dcolor.yaml')
         self.cmn,self.cm=self.return_cm()
     
     # 单色
@@ -150,10 +149,11 @@ class matcolor:
             else:
                 cmData={'name': name, 'colors': cmap}
 
-            with open("./colorschemes/dcolor.yaml", 'a', encoding='utf-8') as f:
+            with open("../colorschemes/dcolor.yaml", 'a', encoding='utf-8') as f:
                 yaml.dump(data=[cmData], stream=f, sort_keys=False,allow_unicode=True)  
 
-            self.register_schemes(yamlpath='./colorschemes/dcolor.yaml')
+            self.register_schemes(yamlpath='../colorschemes/dcolor.yaml')
+        self.return_cm()
 
     def del_colormap(self,name):
         if name in plt.colormaps():
@@ -163,22 +163,24 @@ class matcolor:
                 cm.unregister_cmap(name=name)
                 
         if name in self.cmn:
-           with open("./colorschemes/dcolor.yaml") as f:
+           with open("../colorschemes/dcolor.yaml") as f:
                schemes = yaml.safe_load(f)
                for i,n in enumerate(self.cmn):
                    if name == n:
                        tmp=i
                schemes.pop(i)
 
-           with open("./colorschemes/dcolor.yaml","w") as f:
+           with open("../colorschemes/dcolor.yaml","w") as f:
                 yaml.dump(data=schemes, stream=f, sort_keys=False,allow_unicode=True)
         else:
-           print("colormap name not existed in dcolor.yaml")  
+           print("colormap name not existed in dcolor.yaml") 
+
+        self.return_cm() 
       
     def return_cm(self):
         cmnarr=[]
         cmlarr=[]
-        with open('./colorschemes/dcolor.yaml') as f:
+        with open('../colorschemes/dcolor.yaml') as f:
             schemes = yaml.safe_load(f)
 
         for scheme in schemes: 
@@ -196,7 +198,7 @@ class matcolor:
         else:
             cmlen=len(self.cmn)
             fig,axes=plt.subplots(cmlen,1,figsize=(12,2.5*cmlen))                                       
-            plt.rcParams["figure.subplot.hspace"]=0.35                  
+            plt.rcParams["figure.subplot.hspace"]=0.5                 
             plt.rcParams["font.family"]="Times New Roman"               
             plt.rcParams["font.style"]="normal"                         
             plt.rcParams["font.weight"]=400                             
